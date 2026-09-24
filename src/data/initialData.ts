@@ -7,7 +7,7 @@ export const initialResidenceInfo: CoProprieteState = {
   syndicPro: 'شركة التدبير العقاري COPRO SYNC H T',
   syndicManager: 'حمزة التيعال',
   syndicContact: '+212 6 61 23 45 67 / contact@coprosync.ma',
-  councilVP: 'شريف العقيدي',
+  councilVP: 'شريف',
   councilVPContact: '+212 6 63 98 76 54',
   initialBankBalance: 6580, // الرصيد المالي الأولي في 12/08/2026
   monthlyDuePerApt: 300,
@@ -183,7 +183,7 @@ export const initialAGTasks: AGTask[] = [
         uploadedAt: '2026-09-08'
       }
     ],
-    notes: 'تم إنهاء الأشغال ومعاينتها من طرف السيد شريف العقيدي، مع توفير 150 درهم مقارنة بالتقدير الأولي.',
+    notes: 'تم إنهاء الأشغال ومعاينتها من طرف السيد شريف، مع توفير 150 درهم مقارنة بالتقدير الأولي.',
     completionDate: '2026-09-08',
     createdAt: '2026-08-13'
   },

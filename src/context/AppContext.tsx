@@ -91,7 +91,7 @@ interface AppContextType {
   importDataJson: (jsonData: string) => boolean;
 }
 
-const STORAGE_PREFIX = 'adam168_syndic_v6_';
+const STORAGE_PREFIX = 'adam168_syndic_v7_';
 
 // Automatically clean older cache versions from browser localStorage
 try {
