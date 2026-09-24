@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { formatCurrency, formatDateFr, getMonthName } from '../utils/formatters';
 import { generateMonthlyReportPDF } from '../utils/pdfGenerator';
-import { historicalFinancials } from '../data/initialData';
 import { Expense, AGTask, BudgetItem, ExpenseType, PaymentMethod, TaskStatus } from '../types';
 import {
   ShieldCheck,
@@ -61,7 +60,14 @@ export const SyndicAuditPortal: React.FC = () => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [editingBudgetItem, setEditingBudgetItem] = useState<BudgetItem | null>(null);
   const [isEditBankOpen, setIsEditBankOpen] = useState(false);
-  const [newBankBalance, setNewBankBalance] = useState<number>(residenceInfo.initialBankBalance);
+
+  const [editFinancialForm, setEditFinancialForm] = useState({
+    monthlyOperatingBudget: residenceInfo.monthlyOperatingBudget ?? 6000,
+    syndicApartmentRent: residenceInfo.syndicApartmentRent ?? 1600,
+    initialBankBalance: residenceInfo.initialBankBalance ?? 6580,
+    bankName: residenceInfo.bankName,
+    bankAccountRib: residenceInfo.bankAccountRib
+  });
 
   const monthName = getMonthName(selectedMonth);
 
@@ -72,6 +78,12 @@ export const SyndicAuditPortal: React.FC = () => {
   });
 
   const totalSpentThisMonth = currentMonthExpenses.reduce((s, e) => s + Number(e.amount), 0);
+  
+  // Current month financial calculations
+  const monthlyOperatingBudget = residenceInfo.monthlyOperatingBudget ?? 6000;
+  const monthlySyndicRent = residenceInfo.syndicApartmentRent ?? 1600;
+  const totalExpectedMonthlyIncome = monthlyOperatingBudget + monthlySyndicRent; // 7,600 DH
+  const netMonthBalance = totalExpectedMonthlyIncome - totalSpentThisMonth;
 
   // Filtered expenses list
   const filteredExpenses = currentMonthExpenses.filter(exp => {
@@ -175,10 +187,16 @@ export const SyndicAuditPortal: React.FC = () => {
                 <span className="text-xs text-emerald-200 font-bold">🏦 الرصيد المالي بالبنك</span>
                 <button
                   onClick={() => {
-                    setNewBankBalance(residenceInfo.initialBankBalance);
+                    setEditFinancialForm({
+                      monthlyOperatingBudget: monthlyOperatingBudget,
+                      syndicApartmentRent: monthlySyndicRent,
+                      initialBankBalance: residenceInfo.initialBankBalance,
+                      bankName: residenceInfo.bankName,
+                      bankAccountRib: residenceInfo.bankAccountRib
+                    });
                     setIsEditBankOpen(true);
                   }}
-                  className="text-[10px] text-emerald-300 hover:underline flex items-center gap-1"
+                  className="text-[10px] text-emerald-300 hover:underline flex items-center gap-1 font-bold"
                 >
                   <Edit className="w-3 h-3" /> تعديل
                 </button>
@@ -187,8 +205,8 @@ export const SyndicAuditPortal: React.FC = () => {
                 {formatCurrency(currentBankBalance)}
               </div>
               <div className="text-[11px] text-emerald-200/80 mt-1 flex items-center justify-between">
-                <span>التجاري وفا بنك</span>
-                <span className="text-emerald-300 font-bold">+1,600 د.م كراء شقة 21</span>
+                <span>{residenceInfo.bankName}</span>
+                <span className="text-emerald-300 font-bold">+{formatCurrency(monthlySyndicRent)} كراء شقة 21</span>
               </div>
             </div>
           </div>
@@ -290,7 +308,7 @@ export const SyndicAuditPortal: React.FC = () => {
           }`}
         >
           <Wallet className="w-4 h-4" />
-          <span>4. الرصيد البنكي والمالي</span>
+          <span>4. حساب الشهر والبنك (+{formatCurrency(totalExpectedMonthlyIncome)})</span>
         </button>
       </div>
 
@@ -567,95 +585,148 @@ export const SyndicAuditPortal: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 4: SITUATION BANCAIRE & HISTORIQUE (EDITABLE) */}
+      {/* TAB 4: SITUATION DU MOIS EN COURS (6,000 + 1,600 - CHARGES) */}
       {activeTab === 'banque' && (
         <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-base font-extrabold text-slate-900 dark:text-white">
-                الحساب البنكي والوضعية المالية العامة
+              <h2 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <span>💰 الوضعية المالية وحساب شهر {monthName} {selectedYear}</span>
               </h2>
-              <p className="text-xs text-slate-500">
-                بيانات الحساب البنكي للإقامة، رصيد الانطلاق ومداخيل كراء شقة السنديك.
+              <p className="text-xs text-slate-500 mt-0.5">
+                تتبع مداخيل الشهر (6,000 د.م واجبات + 1,600 د.م كراء) مخصوماً منها مصاريف الشهر الحالي، مع تفاصيل الحساب البنكي.
               </p>
             </div>
 
             <button
               onClick={() => {
-                setNewBankBalance(residenceInfo.initialBankBalance);
+                setEditFinancialForm({
+                  monthlyOperatingBudget: monthlyOperatingBudget,
+                  syndicApartmentRent: monthlySyndicRent,
+                  initialBankBalance: residenceInfo.initialBankBalance,
+                  bankName: residenceInfo.bankName,
+                  bankAccountRib: residenceInfo.bankAccountRib
+                });
                 setIsEditBankOpen(true);
               }}
-              className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition"
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm"
             >
               <Edit className="w-3.5 h-3.5" />
-              تعديل بيانات البنك
+              تعديل مبالغ الشهر والبنك
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Bank details card */}
-            <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 space-y-3">
-              <h3 className="font-black text-emerald-900 dark:text-emerald-300 text-xs uppercase">
-                🏦 الحساب البنكي للإقامة
-              </h3>
-              <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">البنك :</span>
-                  <span className="font-bold text-slate-900 dark:text-white">{residenceInfo.bankName}</span>
+          {/* 3 Main Calculation Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Card 1: المداخيل المقررة للشهر الحالي */}
+            <div className="p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                  📈 1. المداخيل المقررة لشهر {monthName}
+                </span>
+                <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-black">
+                  + مدخول
+                </span>
+              </div>
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-400">ميزانية واجبات الشقق :</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{formatCurrency(monthlyOperatingBudget)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">رقم الحساب (RIB) :</span>
-                  <span className="font-mono font-bold text-slate-900 dark:text-white">{residenceInfo.bankAccountRib}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-400">كراء شقة السنديك (21) :</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{formatCurrency(monthlySyndicRent)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">الرصيد المتاح حالياً :</span>
-                  <span className="font-extrabold text-emerald-600 text-sm">{formatCurrency(currentBankBalance)}</span>
+                <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/80 flex justify-between items-center">
+                  <span className="font-black text-emerald-900 dark:text-emerald-200">مجموع المداخيل :</span>
+                  <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">
+                    +{formatCurrency(totalExpectedMonthlyIncome)}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Syndic apartment rental card */}
-            <div className="p-5 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 space-y-3">
-              <h3 className="font-black text-blue-900 dark:text-blue-300 text-xs uppercase">
-                🏠 مداخيل كراء شقة السنديك (شقة 21)
-              </h3>
-              <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">القرار المصادق عليه :</span>
-                  <span className="font-bold text-slate-900 dark:text-white">قرار الجمع العام ج.9</span>
+            {/* Card 2: مصاريف الشهر الحالي */}
+            <div className="p-5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/50 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-rose-800 dark:text-rose-300">
+                  📉 2. مصاريف وفواتير شهر {monthName}
+                </span>
+                <span className="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-black">
+                  - مصاريف
+                </span>
+              </div>
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-400">عدد الفواتير المسجلة :</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{currentMonthExpenses.length} فواتير</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">السومة الكرائية الشهرية :</span>
-                  <span className="font-extrabold text-blue-600 text-sm">1,600.00 درهم / شهر</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-400">المصاريف المؤداة :</span>
+                  <span className="font-extrabold text-rose-600">{formatCurrency(totalSpentThisMonth)}</span>
                 </div>
-                <p className="text-[11px] text-slate-500 pt-1">
-                  تُحول السومة الكرائية مباشرة إلى الحساب البنكي لدعم صندوق الإصلاحات.
-                </p>
+                <div className="pt-2 border-t border-rose-200/80 dark:border-rose-800/80 flex justify-between items-center">
+                  <span className="font-black text-rose-900 dark:text-rose-200">مجموع المصاريف :</span>
+                  <span className="text-sm font-black text-rose-600 dark:text-rose-400">
+                    -{formatCurrency(totalSpentThisMonth)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3: الصافي / الفائض لشهر الحالي */}
+            <div className={`p-5 rounded-2xl border space-y-3 ${
+              netMonthBalance >= 0 
+                ? 'bg-blue-50/70 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/50' 
+                : 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/50'
+            }`}>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-blue-800 dark:text-blue-300">
+                  ⚖️ 3. الصافي / الفائض لشهر {monthName}
+                </span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-black text-white ${netMonthBalance >= 0 ? 'bg-blue-600' : 'bg-amber-600'}`}>
+                  = الصافي
+                </span>
+              </div>
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-400">المعادلة الشهرية :</span>
+                  <span className="font-bold text-[11px] text-slate-500">(المداخيل - المصاريف)</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px] text-slate-600 dark:text-slate-400">
+                  <span>{formatCurrency(totalExpectedMonthlyIncome)} - {formatCurrency(totalSpentThisMonth)}</span>
+                </div>
+                <div className="pt-2 border-t border-blue-200/80 dark:border-blue-800/80 flex justify-between items-center">
+                  <span className="font-black text-slate-900 dark:text-white">الفائض الصافي :</span>
+                  <span className={`text-sm font-black ${netMonthBalance >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    {netMonthBalance >= 0 ? '+' : ''}{formatCurrency(netMonthBalance)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Historical AG balance */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
-            <h3 className="font-bold text-slate-900 dark:text-white">
-              📋 التقرير المالي السابق المصادق عليه في الجمع العام (12/08/2026) :
+          {/* Bank Account Info Card */}
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
+            <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase flex items-center gap-1.5">
+              <span>🏦 الحساب البنكي للإقامة والرصيد المتوفر</span>
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 text-[10px] block">المداخيل السابقة</span>
-                <span className="font-extrabold text-blue-600">{formatCurrency(historicalFinancials.recettesHistoriques)}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/60">
+                <span className="text-slate-400 text-[10px] block">اسم البنك</span>
+                <span className="font-extrabold text-slate-900 dark:text-white mt-0.5 block">{residenceInfo.bankName}</span>
               </div>
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 text-[10px] block">المصاريف السابقة</span>
-                <span className="font-extrabold text-rose-600">{formatCurrency(historicalFinancials.depensesPassees)}</span>
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/60">
+                <span className="text-slate-400 text-[10px] block">رقم الحساب (RIB)</span>
+                <span className="font-mono font-bold text-slate-900 dark:text-white mt-0.5 block truncate" title={residenceInfo.bankAccountRib}>
+                  {residenceInfo.bankAccountRib}
+                </span>
               </div>
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 text-[10px] block">العجز السابق المصفى</span>
-                <span className="font-extrabold text-amber-600">-{formatCurrency(historicalFinancials.deficitAnterieur)}</span>
-              </div>
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 text-[10px] block">رصيد الانطلاق الصافي</span>
-                <span className="font-extrabold text-emerald-600">{formatCurrency(historicalFinancials.soldeDepartReel)}</span>
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/30">
+                <span className="text-slate-400 text-[10px] block">الرصيد الإجمالي المتاح</span>
+                <span className="font-black text-emerald-600 text-sm mt-0.5 block">
+                  {formatCurrency(currentBankBalance)}
+                </span>
               </div>
             </div>
           </div>
@@ -747,34 +818,109 @@ export const SyndicAuditPortal: React.FC = () => {
         </div>
       )}
 
-      {/* --- MODAL 4: EDIT BANK BALANCE --- */}
+      {/* --- MODAL 4: EDIT FINANCIAL AMOUNTS & BANK --- */}
       {isEditBankOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 text-right">
-            <div className="flex justify-between items-center">
-              <h3 className="font-black text-sm text-slate-900 dark:text-white">تعديل رصيد الانطلاق البنكي</h3>
-              <button onClick={() => setIsEditBankOpen(false)} className="text-slate-400 hover:text-slate-700">✕</button>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 text-right">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="font-black text-sm text-slate-900 dark:text-white">
+                تعديل مبالغ الشهر والبيانات البنكية
+              </h3>
+              <button onClick={() => setIsEditBankOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">✕</button>
             </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">الرصيد الافتتاحي (درهم)</label>
-              <input
-                type="number"
-                value={newBankBalance}
-                onChange={e => setNewBankBalance(Number(e.target.value))}
-                className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold"
-              />
-              <span className="text-[10px] text-slate-400 mt-1 block">الرصيد المعتمد في محضر الجمع العام: 6,580 درهم.</span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  ميزانية التسيير الشهرية (واجبات الشقق)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={editFinancialForm.monthlyOperatingBudget}
+                    onChange={e => setEditFinancialForm({ ...editFinancialForm, monthlyOperatingBudget: Number(e.target.value) })}
+                    className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold pl-12"
+                    placeholder="6000"
+                  />
+                  <span className="absolute left-3 top-2.5 text-[11px] text-slate-400 font-bold">د.م</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  سومة كراء شقة السنديك (شقة 21)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={editFinancialForm.syndicApartmentRent}
+                    onChange={e => setEditFinancialForm({ ...editFinancialForm, syndicApartmentRent: Number(e.target.value) })}
+                    className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold pl-12"
+                    placeholder="1600"
+                  />
+                  <span className="absolute left-3 top-2.5 text-[11px] text-slate-400 font-bold">د.م</span>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  الرصيد الافتتاحي بالبنك (رصيد الانطلاق)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={editFinancialForm.initialBankBalance}
+                    onChange={e => setEditFinancialForm({ ...editFinancialForm, initialBankBalance: Number(e.target.value) })}
+                    className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold pl-12"
+                    placeholder="6580"
+                  />
+                  <span className="absolute left-3 top-2.5 text-[11px] text-slate-400 font-bold">د.م</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  اسم البنك
+                </label>
+                <input
+                  type="text"
+                  value={editFinancialForm.bankName}
+                  onChange={e => setEditFinancialForm({ ...editFinancialForm, bankName: e.target.value })}
+                  className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  رقم الحساب البنكي (RIB)
+                </label>
+                <input
+                  type="text"
+                  value={editFinancialForm.bankAccountRib}
+                  onChange={e => setEditFinancialForm({ ...editFinancialForm, bankAccountRib: e.target.value })}
+                  className="w-full bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold font-mono"
+                />
+              </div>
             </div>
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-              <button onClick={() => setIsEditBankOpen(false)} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold">إلغاء</button>
+
+            <div className="flex justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+              <button onClick={() => setIsEditBankOpen(false)} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold">
+                إلغاء
+              </button>
               <button
                 onClick={() => {
-                  updateResidenceInfo({ initialBankBalance: newBankBalance });
+                  updateResidenceInfo({
+                    monthlyOperatingBudget: editFinancialForm.monthlyOperatingBudget,
+                    syndicApartmentRent: editFinancialForm.syndicApartmentRent,
+                    initialBankBalance: editFinancialForm.initialBankBalance,
+                    bankName: editFinancialForm.bankName,
+                    bankAccountRib: editFinancialForm.bankAccountRib
+                  });
                   setIsEditBankOpen(false);
                 }}
-                className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition"
               >
-                حفظ
+                حفظ التعديلات
               </button>
             </div>
           </div>

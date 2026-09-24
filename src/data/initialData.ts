@@ -15,7 +15,9 @@ export const initialResidenceInfo: CoProprieteState = {
   bankAccountRib: '011 360 0000 123456789012 34 (التجاري وفا بنك - وكالة القنيطرة)',
   bankName: 'التجاري وفا بنك',
   fiscalYear: 'من 01/09/2026 إلى 31/08/2027',
-  agDate: '12/08/2026'
+  agDate: '12/08/2026',
+  syndicApartmentRent: 1600,
+  monthlyOperatingBudget: 6000
 };
 
 // المعطيات المالية التاريخية من محضر الجمع العام لـ 12/08/2026

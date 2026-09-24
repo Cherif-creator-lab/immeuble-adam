@@ -138,4 +138,6 @@ export interface CoProprieteState {
   bankName: string;
   fiscalYear: string;
   agDate: string;
+  syndicApartmentRent?: number;
+  monthlyOperatingBudget?: number;
 }
