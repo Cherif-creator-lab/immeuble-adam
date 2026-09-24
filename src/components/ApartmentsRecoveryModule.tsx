@@ -39,7 +39,7 @@ export const ApartmentsRecoveryModule: React.FC<ApartmentsRecoveryModuleProps> =
 
   const handleTogglePaymentCell = (apt: Apartment, month: number) => {
     if (apt.monthlyDue === 0) {
-      alert("شقة وكيل الاتحاد (شقة 20) مكراة لصالح صندوق الإقامة بمبلغ 1,900 درهم شهرياً.");
+      alert("شقة وكيل الاتحاد (شقة 21) مكراة لصالح صندوق الإقامة بمبلغ 1,600 درهم شهرياً.");
       return;
     }
 

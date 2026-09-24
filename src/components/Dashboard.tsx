@@ -298,8 +298,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[11px]">
-            <span className="text-slate-500">كراء شقة السنديك (20) :</span>
-            <span className="font-bold text-emerald-600">+1,900 د.م/شهر</span>
+            <span className="text-slate-500">كراء شقة السنديك (21) :</span>
+            <span className="font-bold text-emerald-600">+1,600 د.م/شهر</span>
           </div>
         </div>
       </div>

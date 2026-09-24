@@ -91,7 +91,18 @@ interface AppContextType {
   importDataJson: (jsonData: string) => boolean;
 }
 
-const STORAGE_PREFIX = 'adam168_syndic_v4_';
+const STORAGE_PREFIX = 'adam168_syndic_v6_';
+
+// Automatically clean older cache versions from browser localStorage
+try {
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('adam168_') && !key.startsWith(STORAGE_PREFIX)) {
+      localStorage.removeItem(key);
+    }
+  });
+} catch (e) {
+  console.error('Failed to cleanup old storage', e);
+}
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -408,18 +419,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }).filter(alert => alert.exceededBy > 0);
 
   const resetToDefaultData = () => {
-    if (window.confirm('Voulez-vous réinitialiser toutes les données aux valeurs par défaut de la Résidence Adam 168 ?')) {
-      setResidenceInfo(initialResidenceInfo);
-      setBudgetItems(initialBudgetItems);
-      setApartments(initialApartments);
-      setLitigationCases(initialLitigationCases);
-      setAGTasks(initialAGTasks);
-      setExpenses(initialExpenses);
-      setPayments(initialPaymentRecords);
-      setExtraIncomes(initialExtraIncomes);
-      localStorage.clear();
-      alert('Données réinitialisées avec succès.');
-    }
+    localStorage.clear();
+    setResidenceInfo(initialResidenceInfo);
+    setBudgetItems(initialBudgetItems);
+    setApartments(initialApartments);
+    setLitigationCases(initialLitigationCases);
+    setAGTasks(initialAGTasks);
+    setExpenses(initialExpenses);
+    setPayments(initialPaymentRecords);
+    setExtraIncomes(initialExtraIncomes);
+    window.location.reload();
   };
 
   const exportDataJson = () => {
