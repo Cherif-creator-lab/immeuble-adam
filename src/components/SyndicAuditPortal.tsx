@@ -594,7 +594,7 @@ export const SyndicAuditPortal: React.FC = () => {
                 <span>💰 الوضعية المالية وحساب شهر {monthName} {selectedYear}</span>
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                تتبع مداخيل الشهر (6,000 د.م واجبات + 1,600 د.م كراء) مخصوماً منها مصاريف الشهر الحالي، مع تفاصيل الحساب البنكي.
+                تتبع المداخيل المقررة للشهر (6,000 د.م واجبات + 1,600 د.م كراء) مخصوماً منها مصاريف الشهر الحالي.
               </p>
             </div>
 
@@ -612,7 +612,7 @@ export const SyndicAuditPortal: React.FC = () => {
               className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm"
             >
               <Edit className="w-3.5 h-3.5" />
-              تعديل مبالغ الشهر والبنك
+              تعديل مداخيل الشهر (6000 / 1600)
             </button>
           </div>
 
@@ -702,31 +702,6 @@ export const SyndicAuditPortal: React.FC = () => {
                     {netMonthBalance >= 0 ? '+' : ''}{formatCurrency(netMonthBalance)}
                   </span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bank Account Info Card */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
-            <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase flex items-center gap-1.5">
-              <span>🏦 الحساب البنكي للإقامة والرصيد المتوفر</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/60">
-                <span className="text-slate-400 text-[10px] block">اسم البنك</span>
-                <span className="font-extrabold text-slate-900 dark:text-white mt-0.5 block">{residenceInfo.bankName}</span>
-              </div>
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/60">
-                <span className="text-slate-400 text-[10px] block">رقم الحساب (RIB)</span>
-                <span className="font-mono font-bold text-slate-900 dark:text-white mt-0.5 block truncate" title={residenceInfo.bankAccountRib}>
-                  {residenceInfo.bankAccountRib}
-                </span>
-              </div>
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/30">
-                <span className="text-slate-400 text-[10px] block">الرصيد الإجمالي المتاح</span>
-                <span className="font-black text-emerald-600 text-sm mt-0.5 block">
-                  {formatCurrency(currentBankBalance)}
-                </span>
               </div>
             </div>
           </div>
