@@ -204,7 +204,7 @@ export const SyndicAuditPortal: React.FC = () => {
               </div>
               <div className="text-[11px] text-emerald-200/80 mt-1 flex items-center justify-between">
                 <span>التجاري وفا بنك</span>
-                <span className="text-emerald-300 font-bold">+1,900 د.م كراء شقة 20</span>
+                <span className="text-emerald-300 font-bold">+1,600 د.م كراء شقة 21</span>
               </div>
             </div>
           </div>
@@ -633,7 +633,7 @@ export const SyndicAuditPortal: React.FC = () => {
             {/* Syndic apartment rental card */}
             <div className="p-5 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 space-y-3">
               <h3 className="font-black text-blue-900 dark:text-blue-300 text-xs uppercase">
-                🏠 مداخيل كراء شقة السنديك (شقة 20)
+                🏠 مداخيل كراء شقة السنديك (شقة 21)
               </h3>
               <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
                 <div className="flex justify-between">
@@ -642,7 +642,7 @@ export const SyndicAuditPortal: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">السومة الكرائية الشهرية :</span>
-                  <span className="font-extrabold text-blue-600 text-sm">1,900.00 درهم / شهر</span>
+                  <span className="font-extrabold text-blue-600 text-sm">1,600.00 درهم / شهر</span>
                 </div>
                 <p className="text-[11px] text-slate-500 pt-1">
                   تُحول السومة الكرائية مباشرة إلى الحساب البنكي لدعم صندوق الإصلاحات.

@@ -91,7 +91,7 @@ interface AppContextType {
   importDataJson: (jsonData: string) => boolean;
 }
 
-const STORAGE_PREFIX = 'adam168_syndic_v3_';
+const STORAGE_PREFIX = 'adam168_syndic_v4_';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 

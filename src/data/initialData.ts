@@ -308,8 +308,8 @@ export const initialAGTasks: AGTask[] = [
   {
     id: 'ag-9',
     agReference: 'الجمع العام 12/08/2026 - قرار ج.9',
-    title: 'كراء شقة وكيل الاتحاد (شقة السنديك) لتمويل الصندوق',
-    description: 'المصادقة على استغلال الشقة المخصصة للسنديك للكراء بمبلغ بين 1,800 و 2,000 درهم/شهر لدعم مداخيل الإقامة (تم الاتفاق على 1,900 درهم/شهر).',
+    title: 'كراء شقة وكيل الاتحاد (شقة السنديك - شقة 21) لتمويل الصندوق',
+    description: 'المصادقة على استغلال الشقة المخصصة للسنديك (شقة 21) للكراء بمبلغ 1,600 درهم/شهر لدعم مداخيل الإقامة وصندوق الإصلاحات.',
     category: 'GESTION',
     status: 'TERMINE',
     priority: 'HAUTE',
@@ -321,14 +321,14 @@ export const initialAGTasks: AGTask[] = [
     attachments: [
       {
         id: 'att-6',
-        name: 'Contrat_Bail_Appt_Syndic_1900DH.pdf',
+        name: 'Contrat_Bail_Appt_Syndic_1600DH.pdf',
         size: 450000,
         type: 'pdf',
         dataUrl: '',
         uploadedAt: '2026-08-30'
       }
     ],
-    notes: 'تم توقيع العقد، ويتم تحويل السومة الكرائية (1,900 درهم شهرياً) مباشرة إلى حساب الإقامة البنكي.',
+    notes: 'تم توقيع العقد، ويتم تحويل السومة الكرائية (1,600 درهم شهرياً) مباشرة إلى حساب الإقامة البنكي.',
     completionDate: '2026-08-30',
     createdAt: '2026-08-13'
   }
@@ -359,7 +359,7 @@ export const initialApartments: Apartment[] = [
   { id: 17, number: 'شقة 17', floor: 4, ownerName: 'شقة 17', phone: '', surfaceM2: 94, isRented: false, monthlyDue: 300, isLitigation: true },
   { id: 18, number: 'شقة 18', floor: 4, ownerName: 'شقة 18', phone: '', surfaceM2: 85, isRented: false, monthlyDue: 300, isLitigation: false },
   { id: 19, number: 'شقة 19', floor: 4, ownerName: 'شقة 19', phone: '', surfaceM2: 92, isRented: false, monthlyDue: 300, isLitigation: false },
-  { id: 20, number: 'شقة 20', floor: 4, ownerName: 'شقة وكيل الاتحاد (شقة 20)', phone: '', surfaceM2: 55, isRented: true, monthlyDue: 0, isLitigation: false, notes: 'ملك مشترك مكترى بـ 1,900 درهم/شهر لصالح حساب الإقامة' }
+  { id: 21, number: 'شقة 21', floor: 4, ownerName: 'شقة وكيل الاتحاد (شقة 21)', phone: '', surfaceM2: 55, isRented: true, monthlyDue: 0, isLitigation: false, notes: 'ملك مشترك مكترى بـ 1,600 درهم/شهر لصالح حساب الإقامة' }
 ];
 
 export const initialLitigationCases: LitigationCase[] = [
@@ -608,19 +608,19 @@ export const initialExtraIncomes: ExtraIncome[] = [
   {
     id: 'inc-2026-08',
     date: '2026-08-15',
-    source: 'سومة كراء شقة وكيل الاتحاد (شقة السنديك - شقة 20)',
-    amount: 1900,
+    source: 'سومة كراء شقة وكيل الاتحاد (شقة السنديك - شقة 21)',
+    amount: 1600,
     paymentMethod: 'VIREMENT',
-    receiptNumber: 'كراء-2026-08-20',
+    receiptNumber: 'كراء-2026-08-21',
     notes: 'واجب كراء شهر غشت محول إلى حساب الإقامة البنكي'
   },
   {
     id: 'inc-2026-09',
     date: '2026-09-05',
-    source: 'سومة كراء شقة وكيل الاتحاد (شقة السنديك - شقة 20)',
-    amount: 1900,
+    source: 'سومة كراء شقة وكيل الاتحاد (شقة السنديك - شقة 21)',
+    amount: 1600,
     paymentMethod: 'VIREMENT',
-    receiptNumber: 'كراء-2026-09-20',
+    receiptNumber: 'كراء-2026-09-21',
     notes: 'واجب كراء شهر شتنبر محول إلى حساب الإقامة البنكي'
   }
 ];
