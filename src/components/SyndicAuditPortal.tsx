@@ -152,8 +152,8 @@ export const SyndicAuditPortal: React.FC = () => {
             </p>
           </div>
 
-          {/* 3 Main Audit Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          {/* Main Audit Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             {/* Card 1: Spent by Syndic this month */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15">
               <div className="flex justify-between items-start">
@@ -178,35 +178,6 @@ export const SyndicAuditPortal: React.FC = () => {
               </div>
               <div className="text-[11px] text-emerald-300 font-bold mt-1">
                 {inProgressTasks.length} قيد الإنجاز &bull; {waitingTasks.length} في الانتظار
-              </div>
-            </div>
-
-            {/* Card 3: Bank Balance */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15">
-              <div className="flex justify-between items-start">
-                <span className="text-xs text-emerald-200 font-bold">🏦 الرصيد المالي بالبنك</span>
-                <button
-                  onClick={() => {
-                    setEditFinancialForm({
-                      monthlyOperatingBudget: monthlyOperatingBudget,
-                      syndicApartmentRent: monthlySyndicRent,
-                      initialBankBalance: residenceInfo.initialBankBalance,
-                      bankName: residenceInfo.bankName,
-                      bankAccountRib: residenceInfo.bankAccountRib
-                    });
-                    setIsEditBankOpen(true);
-                  }}
-                  className="text-[10px] text-emerald-300 hover:underline flex items-center gap-1 font-bold"
-                >
-                  <Edit className="w-3 h-3" /> تعديل
-                </button>
-              </div>
-              <div className="text-2xl font-black text-white mt-1">
-                {formatCurrency(currentBankBalance)}
-              </div>
-              <div className="text-[11px] text-emerald-200/80 mt-1 flex items-center justify-between">
-                <span>{residenceInfo.bankName}</span>
-                <span className="text-emerald-300 font-bold">+{formatCurrency(monthlySyndicRent)} كراء شقة 21</span>
               </div>
             </div>
           </div>
