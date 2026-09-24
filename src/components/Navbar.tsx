@@ -42,8 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     setSelectedMonth,
     currentBankBalance,
     exportDataJson,
-    importDataJson,
-    resetToDefaultData
+    importDataJson
   } = useApp();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -215,13 +214,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 accept=".json"
                 className="hidden"
               />
-              <button
-                onClick={resetToDefaultData}
-                className="p-2 text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition"
-                title="إعادة ضبط المعطيات الأصلية"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
             </div>
 
             {/* Mobile menu toggle button */}

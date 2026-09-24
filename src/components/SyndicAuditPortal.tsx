@@ -47,8 +47,7 @@ export const SyndicAuditPortal: React.FC = () => {
     deleteAGTask,
     apartments,
     payments,
-    budgetAlerts,
-    resetToDefaultData
+    budgetAlerts
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'depenses' | 'travaux' | 'budget' | 'banque'>('depenses');
@@ -103,12 +102,6 @@ export const SyndicAuditPortal: React.FC = () => {
     );
   };
 
-  const handleResetData = () => {
-    if (window.confirm('هل تريد استعادة جميع الأرقام والمصاريف الأصلية المعتمدة في البداية؟')) {
-      resetToDefaultData();
-    }
-  };
-
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-16">
       {/* Top Banner: Espace Propriétaire / Contrôle Syndic */}
@@ -120,17 +113,8 @@ export const SyndicAuditPortal: React.FC = () => {
               <span>فضاء تتبع ومراقبة السنديك &bull; جميع المعلومات قابلة للتعديل والتحيين</span>
             </div>
 
-            {/* Month selector & Reset Data */}
+            {/* Month selector */}
             <div className="flex items-center gap-2 self-start sm:self-auto">
-              <button
-                onClick={handleResetData}
-                className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold transition flex items-center gap-1.5"
-                title="استعادة الأرقام الأصلية"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>استعادة الأرقام الأصلية</span>
-              </button>
-
               <div className="bg-slate-800/90 p-1.5 rounded-2xl flex items-center gap-2 border border-slate-700">
                 <span className="text-xs font-semibold text-slate-300 pr-2">الشهر :</span>
                 <select
